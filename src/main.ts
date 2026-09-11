@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // CORS কনফিগারেশন
+  // CORS setup
   app.enableCors({
     origin: true,
     credentials: true,
@@ -16,9 +16,9 @@ async function bootstrap() {
   // global validation pipe setup
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // DTO তে ডিফাইন করা ফিল্ড ছাড়া অন্য ফিল্ড থাকলে তা অটোমেটিক রিমুভ করবে
-      forbidNonWhitelisted: true, // বাড়তি ফিল্ড পাঠালে এরর দেবে
-      transform: true, // ইনকামিং ডাটাকে অটোমেটিক সঠিক টাইপে কনভার্ট করবে
+      whitelist: true, //Only allow properties that are in the DTO
+      forbidNonWhitelisted: true, //Reject properties that are not in the DTO
+      transform: true, //Transform incoming data to match the DTO structure
     }),
   );
 

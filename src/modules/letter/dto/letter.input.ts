@@ -61,6 +61,9 @@ export class LetterType {
   @Field()
   encryptedContent!: string;
 
+  @Field(() => [String], { defaultValue: [] })
+  mediaUrls!: string[];
+
   @Field()
   status!: string;
 

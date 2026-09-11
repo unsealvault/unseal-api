@@ -1,13 +1,34 @@
-import { InputType, Field } from "@nestjs/graphql";
-import { IsEmail, MinLength } from "class-validator";
+// login.input.ts
+import { InputType, Field } from '@nestjs/graphql';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
 export class LoginInput {
   @Field()
-  @IsEmail({}, { message: "Type a valid email address" })
+  @IsEmail({}, { message: 'A valid email address is required' })
+  @IsNotEmpty()
   email!: string;
 
   @Field()
-  @MinLength(6, { message: "Password must be at least 6 characters" })
+  @IsString()
+  @IsNotEmpty({ message: 'Password is required' })
+  password!: string;
+}
+
+
+export class RegisterInput {
+  @Field()
+  @IsString()
+  @IsNotEmpty({ message: 'Name is required' })
+  name!: string;
+
+  @Field()
+  @IsEmail({}, { message: 'A valid email address is required' })
+  @IsNotEmpty()
+  email!: string;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty({ message: 'Password is required' })
   password!: string;
 }

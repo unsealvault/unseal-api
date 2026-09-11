@@ -1,3 +1,4 @@
+// create-user.input.ts
 import { InputType, Field } from "@nestjs/graphql";
 import { IsEmail, IsNotEmpty, MinLength, IsOptional, Matches } from "class-validator";
 
@@ -15,18 +16,14 @@ export class CreateUserInput {
   @MinLength(6, { message: "Password must be at least 6 characters" })
   password!: string;
 
-  @Field({ nullable: true })
-  @Matches(/(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/, {
-    message: "Please provide a valid Bangladeshi mobile number",
-  })
-  @IsOptional()
-  mobileNumber?: string;
+  // @Field({ nullable: true })
+  // @Matches(/(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/, {
+  //   message: "Please provide a valid Bangladeshi mobile number",
+  // })
+  // @IsOptional()
+  // mobileNumber?: string;
 
   @Field({ nullable: true })
   @IsOptional()
   role?: string;
-
-  @Field({ nullable: true })
-  @IsOptional()
-  serialNumber?: number;
 }

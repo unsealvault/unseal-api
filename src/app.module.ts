@@ -16,7 +16,7 @@ import { ScheduleModule } from "@nestjs/schedule";
       isGlobal: true,
     }),
 
-    // MongoDB Atlas কানেকশন
+    // MongoDB Atlas connection setup using Mongoose
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -25,7 +25,7 @@ import { ScheduleModule } from "@nestjs/schedule";
       }),
     }),
 
-    // GraphQL সেটআপ
+    // GraphQL setup
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), "src/schema.gql"),

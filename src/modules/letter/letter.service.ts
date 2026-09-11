@@ -64,6 +64,7 @@ export class LetterService {
       encryptedContent: doc.encryptedContent,
       status: doc.status,
       deliverAt: doc.deliverAt,
+      mediaUrls: doc.mediaUrls,
       createdAt: (doc as any).createdAt || new Date(),
     };
   }
