@@ -1,40 +1,68 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document, Types } from "mongoose";
 
 export type LetterDocument = Letter & Document;
 
+@ObjectType()
 @Schema({ timestamps: true })
 export class Letter {
-  @Prop({ required: true })
-  recipientEmail!: string; 
+  @Field(() => ID)
+  id!: String;
 
-  @Prop({ required: true })
-  encryptedContent!: string; 
+  @Field(() => String)
+  @Prop({ required: true, trim: true, lowercase: true })
+  recipientEmail!: string;
 
+  @Field(() => String)
   @Prop({ required: true })
-  deliverAt!: Date; 
+  encryptedContent!: string;
 
-  @Prop({ default: 'self' })
+  @Field(() => Date)
+  @Prop({ required: true })
+  deliverAt!: Date;
+
+  @Field(() => String, { defaultValue: "self" })
+  @Prop({ default: "self", enum: ["self", "someone_else"] })
   audience!: string;
 
-  @Prop({ default: 'private' })
+  @Field(() => String, { defaultValue: "private" })
+  @Prop({ default: "private", enum: ["private", "public_anonymous"] })
   visibility!: string;
 
-  @Prop({ default: 'Anonymous' })
+  @Field(() => String, { nullable: true, defaultValue: "Anonymous" })
+  @Prop({ default: "Anonymous", trim: true })
   authorName?: string;
 
-  @Prop({ type: [String], default: [] })
-  mediaUrls!: string[];
-
+  @Field(() => String, { defaultValue: "sealed" })
   @Prop({
     type: String,
-    enum: ['pending_verification', 'sealed', 'delivered'],
-    default: 'pending_verification',
+    enum: ["sealed", "delivered"],
+    default: "sealed",
   })
   status!: string;
 
-  @Prop()
-  verificationToken?: string;
+  @Field(() => [String], { defaultValue: [] })
+  @Prop({ type: [String], default: [] })
+  images: string[] = [];
+
+  @Field(() => [String], { defaultValue: [] })
+  @Prop({ type: [String], default: [] })
+  audio: string[] = [];
+
+  @Field(() => [String], { defaultValue: [] })
+  @Prop({ type: [String], default: [] })
+  videos: string[] = [];
+
+  @Field(() => [String], { defaultValue: [] })
+  @Prop({ type: [String], default: [] })
+  files: string[] = [];
+
+  @Field(() => Date)
+  createdAt!: Date;
+
+  @Field(() => Date)
+  updatedAt!: Date;
 }
 
 export const LetterSchema = SchemaFactory.createForClass(Letter);

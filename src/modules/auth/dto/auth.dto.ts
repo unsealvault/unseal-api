@@ -1,29 +1,29 @@
-import { InputType, Field, ObjectType, ID } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsString } from 'class-validator'; 
+import { InputType, Field, ObjectType, Int } from '@nestjs/graphql';
+import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsString } from 'class-validator';
 import { User } from 'src/modules/user/user.schema';
 
 @InputType()
 export class SignUpInput {
-  @Field()
+  @Field(() => String)
   @IsEmail({}, { message: 'A valid email address is required' })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Email cannot be empty' })
   email!: string;
 
-  @Field()
-  @IsString()
+  @Field(() => String)
+  @IsString({ message: 'Password must be a string' })
   @MinLength(8, { message: 'Password must be at least 8 characters long' })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Password cannot be empty' })
   password!: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'Name must be a string' })
   name?: string;
 }
 
 @ObjectType()
 export class AuthResponse {
-  @Field(() => Number)
+  @Field(() => Int)
   statusCode!: number;
 
   @Field(() => Boolean)

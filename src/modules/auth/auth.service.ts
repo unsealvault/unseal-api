@@ -65,7 +65,7 @@ export class AuthService {
       return {
         statusCode: StatusCodes.CREATED,
         success: true,
-        message: 'User registered and authenticated successfully',
+        message: 'User registered successfully',
         accessToken,
         refreshToken,
         user: savedUser,

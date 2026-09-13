@@ -11,22 +11,25 @@ export class LetterService {
     @InjectModel(Letter.name) private readonly letterModel: Model<LetterDocument>,
   ) {}
 
-  // ১. চিঠি সিল করা (নতুন চিঠি তৈরি ও স্টোর)
-  async sealLetter(input: CreateLetterInput): Promise<LetterType> {
-    const newLetter = new this.letterModel({
-      recipientEmail: input.recipientEmail,
-      encryptedContent: input.encryptedContent,
-      deliverAt: input.deliverAt,
-      audience: input.audience || 'self',
-      visibility: input.visibility || 'private',
-      authorName: input.authorName || 'Anonymous',
-      mediaUrls: input.mediaUrls || [],
-      status: 'sealed',
-    });
+  // Create sealLetter
+async sealLetter(input: CreateLetterInput): Promise<LetterType> {
+  const newLetter = new this.letterModel({
+    recipientEmail: input.recipientEmail.trim(),
+    encryptedContent: input.encryptedContent,
+    deliverAt: input.deliverAt,
+    audience: input.audience || 'self',
+    visibility: input.visibility || 'private',
+    authorName: input.authorName || 'Anonymous',
+    images: input.images || [],
+    audio: input.audio || [],
+    videos: input.videos || [],
+    files: input.files || [],
+    status: 'sealed',
+  });
 
-    const savedDoc = await newLetter.save();
-    return this.mapToLetterType(savedDoc);
-  }
+  const savedDoc = await newLetter.save();
+  return this.mapToLetterType(savedDoc);
+}
 
   // ২. আইডি দিয়ে নির্দিষ্ট চিঠি খোঁজা (আনসিল রিডার পেজের জন্য)
   async findById(id: string): Promise<LetterType> {
@@ -57,17 +60,20 @@ export class LetterService {
   }
 
   // Mongoose Document থেকে GraphQL LetterType ফরম্যাটে কনভার্ট করার মেথড
-  private mapToLetterType(doc: LetterDocument): LetterType {
-    return {
-      id: doc._id.toString(),
-      recipientEmail: doc.recipientEmail,
-      encryptedContent: doc.encryptedContent,
-      status: doc.status,
-      deliverAt: doc.deliverAt,
-      mediaUrls: doc.mediaUrls,
-      createdAt: (doc as any).createdAt || new Date(),
-    };
-  }
+private mapToLetterType(doc: LetterDocument): LetterType {
+  return {
+    id: doc._id.toString(),
+    recipientEmail: doc.recipientEmail,
+    encryptedContent: doc.encryptedContent,
+    images: doc.images || [],
+    audio: doc.audio || [],
+    videos: doc.videos || [],
+    files: doc.files || [],
+    status: doc.status,
+    deliverAt: doc.deliverAt,
+    createdAt: (doc as any).createdAt || new Date(),
+  };
+}
 
 
   async processDueLetters(): Promise<number> {

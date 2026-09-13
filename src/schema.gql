@@ -6,18 +6,21 @@ type AuthResponse {
   accessToken: String!
   message: String!
   refreshToken: String!
-  statusCode: Float!
+  statusCode: Int!
   success: Boolean!
   user: User!
 }
 
 input CreateLetterInput {
   audience: String! = "self"
+  audio: [String!]! = []
   authorName: String
   deliverAt: DateTime!
   encryptedContent: String!
-  mediaUrls: [String!]! = []
+  files: [String!]! = []
+  images: [String!]! = []
   recipientEmail: String!
+  videos: [String!]! = []
   visibility: String! = "private"
 }
 
@@ -27,13 +30,16 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type LetterType {
+  audio: [String!]!
   createdAt: DateTime!
   deliverAt: DateTime!
   encryptedContent: String!
+  files: [String!]!
   id: ID!
-  mediaUrls: [String!]!
+  images: [String!]!
   recipientEmail: String!
   status: String!
+  videos: [String!]!
 }
 
 input LoginInput {

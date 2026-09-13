@@ -7,7 +7,7 @@ import { CreateLetterInput, LetterType } from './dto/letter.input';
 export class LetterResolver {
   constructor(private readonly letterService: LetterService) {}
 
-  // ১. চিঠি সিল করার মিউটেশন (Create / Seal Letter)
+  // Create / Seal Letter
   @Mutation(() => LetterType)
   async sealLetter(
     @Args('input') input: CreateLetterInput,
@@ -15,7 +15,7 @@ export class LetterResolver {
     return this.letterService.sealLetter(input);
   }
 
-  // ২. আইডি দিয়ে নির্দিষ্ট চিঠি খোঁজা (Unseal Reader Page-এর জন্য)
+  // ২. Unseal Letter by id
   @Query(() => LetterType, { nullable: true })
   async getLetterById(
     @Args('id') id: string,
@@ -23,7 +23,7 @@ export class LetterResolver {
     return this.letterService.findById(id);
   }
 
-  // ৩. পাবলিক ভল্টের উন্মুক্ত চিঠিগুলো পাওয়ার কুয়েরি
+  // ৩. Unsell Letter for Public Vault
   @Query(() => [LetterType])
   async publicVault(): Promise<LetterType[]> {
     return this.letterService.getPublicLetters();

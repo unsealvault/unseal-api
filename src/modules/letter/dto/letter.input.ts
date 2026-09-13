@@ -1,13 +1,5 @@
 import { InputType, Field, ObjectType, ID } from '@nestjs/graphql';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  IsDate,
-  IsOptional,
-  IsArray,
-  IsIn,
-} from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsDate, IsOptional, IsArray, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 @InputType()
@@ -44,14 +36,30 @@ export class CreateLetterInput {
   @IsOptional()
   authorName?: string;
 
+  // নতুন ৪টি ফিল্ড
   @Field(() => [String], { defaultValue: [] })
   @IsArray()
   @IsOptional()
-  mediaUrls?: string[];
+  images?: string[];
+
+  @Field(() => [String], { defaultValue: [] })
+  @IsArray()
+  @IsOptional()
+  audio?: string[];
+
+  @Field(() => [String], { defaultValue: [] })
+  @IsArray()
+  @IsOptional()
+  videos?: string[];
+
+  @Field(() => [String], { defaultValue: [] })
+  @IsArray()
+  @IsOptional()
+  files?: string[];
 }
 
 @ObjectType()
-export class LetterType {
+export class LetterType { 
   @Field(() => ID)
   id!: string;
 
@@ -62,7 +70,16 @@ export class LetterType {
   encryptedContent!: string;
 
   @Field(() => [String], { defaultValue: [] })
-  mediaUrls!: string[];
+  images!: string[];
+
+  @Field(() => [String], { defaultValue: [] })
+  audio!: string[];
+
+  @Field(() => [String], { defaultValue: [] })
+  videos!: string[];
+
+  @Field(() => [String], { defaultValue: [] })
+  files!: string[];
 
   @Field()
   status!: string;
