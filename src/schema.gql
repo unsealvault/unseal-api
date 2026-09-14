@@ -20,6 +20,7 @@ input CreateLetterInput {
   files: [String!]! = []
   images: [String!]! = []
   recipientEmail: String!
+  userId: ID
   videos: [String!]! = []
   visibility: String! = "private"
 }
@@ -30,7 +31,9 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type LetterType {
+  audience: String!
   audio: [String!]!
+  authorName: String
   createdAt: DateTime!
   deliverAt: DateTime!
   encryptedContent: String!
@@ -39,7 +42,9 @@ type LetterType {
   images: [String!]!
   recipientEmail: String!
   status: String!
+  userId: ID
   videos: [String!]!
+  visibility: String!
 }
 
 input LoginInput {

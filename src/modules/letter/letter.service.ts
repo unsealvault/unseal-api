@@ -14,6 +14,7 @@ export class LetterService {
   // Create sealLetter
 async sealLetter(input: CreateLetterInput): Promise<LetterType> {
   const newLetter = new this.letterModel({
+    userId: input.userId ? new Types.ObjectId(input.userId) : undefined,
     recipientEmail: input.recipientEmail.trim(),
     encryptedContent: input.encryptedContent,
     deliverAt: input.deliverAt,
@@ -62,17 +63,20 @@ async sealLetter(input: CreateLetterInput): Promise<LetterType> {
   // Mongoose Document থেকে GraphQL LetterType ফরম্যাটে কনভার্ট করার মেথড
 private mapToLetterType(doc: LetterDocument): LetterType {
   return {
-    id: doc._id.toString(),
-    recipientEmail: doc.recipientEmail,
-    encryptedContent: doc.encryptedContent,
-    images: doc.images || [],
-    audio: doc.audio || [],
-    videos: doc.videos || [],
-    files: doc.files || [],
-    status: doc.status,
-    deliverAt: doc.deliverAt,
-    createdAt: (doc as any).createdAt || new Date(),
-  };
+  id: doc._id.toString(),
+  userId: doc.userId ? doc.userId.toString() : undefined,
+  recipientEmail: doc.recipientEmail,
+  encryptedContent: doc.encryptedContent,
+  images: doc.images || [],
+  audio: doc.audio || [],
+  videos: doc.videos || [],
+  files: doc.files || [],
+  status: doc.status,
+  audience: doc.audience,
+  visibility: doc.visibility,
+  deliverAt: doc.deliverAt,
+  createdAt: doc.createdAt
+};
 }
 
 

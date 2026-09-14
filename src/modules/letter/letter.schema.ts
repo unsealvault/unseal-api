@@ -10,6 +10,10 @@ export class Letter {
   @Field(() => ID)
   id!: String;
 
+  @Field(() => ID, { nullable: true })
+  @Prop({ type: Types.ObjectId, ref: 'User', required: false, index: true })
+  userId?: Types.ObjectId;
+
   @Field(() => String)
   @Prop({ required: true, trim: true, lowercase: true })
   recipientEmail!: string;

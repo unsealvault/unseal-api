@@ -1,11 +1,23 @@
-import { InputType, Field, ObjectType, ID } from '@nestjs/graphql';
-import { IsEmail, IsNotEmpty, IsString, IsDate, IsOptional, IsArray, IsIn } from 'class-validator';
-import { Type } from 'class-transformer';
+import { InputType, Field, ObjectType, ID } from "@nestjs/graphql";
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsDate,
+  IsOptional,
+  IsArray,
+  IsIn,
+} from "class-validator";
+import { Type } from "class-transformer";
 
 @InputType()
 export class CreateLetterInput {
+  @Field(() => ID, { nullable: true })
+  @IsOptional()
+  userId?: string;
+
   @Field()
-  @IsEmail({}, { message: 'A valid email address is required' })
+  @IsEmail({}, { message: "A valid email address is required" })
   @IsNotEmpty()
   recipientEmail!: string;
 
@@ -19,15 +31,15 @@ export class CreateLetterInput {
   @IsDate()
   deliverAt!: Date;
 
-  @Field({ defaultValue: 'self' })
+  @Field({ defaultValue: "self" })
   @IsString()
-  @IsIn(['self', 'someone_else'])
+  @IsIn(["self", "someone_else"])
   @IsOptional()
   audience?: string;
 
-  @Field({ defaultValue: 'private' })
+  @Field({ defaultValue: "private" })
   @IsString()
-  @IsIn(['private', 'public_anonymous'])
+  @IsIn(["private", "public_anonymous"])
   @IsOptional()
   visibility?: string;
 
@@ -59,9 +71,12 @@ export class CreateLetterInput {
 }
 
 @ObjectType()
-export class LetterType { 
+export class LetterType {
   @Field(() => ID)
   id!: string;
+
+  @Field(() => ID, { nullable: true })
+  userId?: string;
 
   @Field()
   recipientEmail!: string;
@@ -69,6 +84,23 @@ export class LetterType {
   @Field()
   encryptedContent!: string;
 
+  @Field()
+  status!: string;
+
+  @Field()
+  deliverAt!: Date;
+
+  // 🔹 এই ৩টি ফিল্ড যুক্ত করুন (যা মিসিং ছিল)
+  @Field(() => String, { defaultValue: 'self' })
+  audience!: string;
+
+  @Field(() => String, { defaultValue: 'private' })
+  visibility!: string;
+
+  @Field(() => String, { nullable: true, defaultValue: 'Anonymous' })
+  authorName?: string;
+
+  // মিডিয়া ফাইল অ্যারেসমূহ
   @Field(() => [String], { defaultValue: [] })
   images!: string[];
 
@@ -81,12 +113,6 @@ export class LetterType {
   @Field(() => [String], { defaultValue: [] })
   files!: string[];
 
-  @Field()
-  status!: string;
-
-  @Field()
-  deliverAt!: Date;
-
-  @Field()
+  @Field(() => Date)
   createdAt!: Date;
 }
