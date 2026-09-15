@@ -13,7 +13,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // global validation pipe setup
+  // global validation pipe setup 
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, //Only allow properties that are in the DTO

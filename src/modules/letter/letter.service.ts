@@ -12,78 +12,71 @@ export class LetterService {
   ) {}
 
   // Create sealLetter
-async sealLetter(input: CreateLetterInput): Promise<LetterType> {
-  const newLetter = new this.letterModel({
-    userId: input.userId ? new Types.ObjectId(input.userId) : undefined,
-    recipientEmail: input.recipientEmail.trim(),
-    encryptedContent: input.encryptedContent,
-    deliverAt: input.deliverAt,
-    audience: input.audience || 'self',
-    visibility: input.visibility || 'private',
-    authorName: input.authorName || 'Anonymous',
-    images: input.images || [],
-    audio: input.audio || [],
-    videos: input.videos || [],
-    files: input.files || [],
-    status: 'sealed',
-  });
+async sealLetter(input: CreateLetterInput): Promise<Letter> {
+    const newLetter = new this.letterModel({
+      ...input,
+      userId: input.userId ? new Types.ObjectId(input.userId) : undefined,
+      status: 'sealed',
+    });
 
-  const savedDoc = await newLetter.save();
-  return this.mapToLetterType(savedDoc);
-}
+    return newLetter.save();
+  }
 
-  // ২. আইডি দিয়ে নির্দিষ্ট চিঠি খোঁজা (আনসিল রিডার পেজের জন্য)
-  async findById(id: string): Promise<LetterType> {
-    if (!Types.ObjectId.isValid(id)) {
+  async getMyLetters(userId: string, userEmail?: string): Promise<Letter[]> {
+    const query: any = {
+      $or: [{ userId: new Types.ObjectId(userId) }],
+    };
+
+    if (userEmail) {
+      query.$or.push({ recipientEmail: userEmail.toLowerCase().trim() });
+    }
+
+    return this.letterModel.find(query).sort({ createdAt: -1 }).exec();
+  }
+
+
+  // 
+  async findById(_id: string): Promise<LetterType> {
+    
+    // console.log("from service", _id)
+    if (!Types.ObjectId.isValid(_id)) {
       throw new NotFoundException('Invalid Letter ID format');
     }
 
-    const doc = await this.letterModel.findById(id).exec();
-    if (!doc) {
+    const result = await this.letterModel.findById(_id).exec();
+    if (!result) {
       throw new NotFoundException('Letter not found in the vault');
     }
 
-    return this.mapToLetterType(doc);
+    return {
+      ...result.toObject(),
+      userId: result.userId?.toString(),
+    } as LetterType;
   }
 
   // ৩. পাবলিক ভল্টের চিঠিগুলো নিয়ে আসা (উন্মুক্ত চিঠি প্রদর্শনের জন্য)
-  async getPublicLetters(): Promise<LetterType[]> {
-    const docs = await this.letterModel
-      .find({
-        visibility: 'public_anonymous',
-        status: 'delivered',
-      })
-      .sort({ createdAt: -1 })
-      .limit(20)
-      .exec();
+  // async getPublicLetters(): Promise<LetterType[]> {
+  //   const docs = await this.letterModel
+  //     .find({
+  //       visibility: 'public_anonymous',
+  //       status: 'delivered',
+  //     })
+  //     .sort({ createdAt: -1 })
+  //     .limit(20)
+  //     .exec();
 
-    return docs.map((doc) => this.mapToLetterType(doc));
-  }
-
-  // Mongoose Document থেকে GraphQL LetterType ফরম্যাটে কনভার্ট করার মেথড
-private mapToLetterType(doc: LetterDocument): LetterType {
-  return {
-  id: doc._id.toString(),
-  userId: doc.userId ? doc.userId.toString() : undefined,
-  recipientEmail: doc.recipientEmail,
-  encryptedContent: doc.encryptedContent,
-  images: doc.images || [],
-  audio: doc.audio || [],
-  videos: doc.videos || [],
-  files: doc.files || [],
-  status: doc.status,
-  audience: doc.audience,
-  visibility: doc.visibility,
-  deliverAt: doc.deliverAt,
-  createdAt: doc.createdAt
-};
-}
+  //     console.log(docs)
+  //   // return docs.map((doc) => this.mapToLetterType(doc));
+  // }
 
 
+
+
+
+
+// Process due Letter
   async processDueLetters(): Promise<number> {
   const now = new Date();
-
-  // সময় উত্তীর্ণ হওয়া চিঠিগুলো আপডেট
   const result = await this.letterModel.updateMany(
     {
       status: 'sealed',
@@ -97,6 +90,7 @@ private mapToLetterType(doc: LetterDocument): LetterType {
   return result.modifiedCount;
 }
 
+// get Due Letter
 async getDueLetters(): Promise<LetterDocument[]> {
   const now = new Date();
   return this.letterModel
@@ -107,6 +101,7 @@ async getDueLetters(): Promise<LetterDocument[]> {
     .exec();
 }
 
+// Marked As Delivered
 async markAsDelivered(id: string): Promise<void> {
   await this.letterModel.findByIdAndUpdate(id, { status: 'delivered' }).exec();
 }

@@ -11,7 +11,6 @@ export enum USER_ROLE {
 @ObjectType()
 @Schema({ timestamps: true })
 export class User extends Document {
-  
   @Field(() => ID)
   declare _id: Types.ObjectId;
 
@@ -20,7 +19,13 @@ export class User extends Document {
   name?: string;
 
   @Field(() => String)
-  @Prop({ type: String, required: true, unique: true, lowercase: true, trim: true })
+  @Prop({
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  })
   email!: string;
 
   @Prop({ type: String, required: true })
@@ -32,7 +37,8 @@ export class User extends Document {
 
   @Field(() => String, { nullable: true })
   @Prop({
-    default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+    default:
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
   })
   profilePhoto?: string;
 

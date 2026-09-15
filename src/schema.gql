@@ -30,7 +30,8 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type LetterType {
+type Letter {
+  _id: ID!
   audience: String!
   audio: [String!]!
   authorName: String
@@ -38,7 +39,24 @@ type LetterType {
   deliverAt: DateTime!
   encryptedContent: String!
   files: [String!]!
-  id: ID!
+  images: [String!]!
+  recipientEmail: String!
+  status: String!
+  updatedAt: DateTime!
+  userId: ID
+  videos: [String!]!
+  visibility: String!
+}
+
+type LetterType {
+  _id: ID!
+  audience: String!
+  audio: [String!]!
+  authorName: String
+  createdAt: DateTime!
+  deliverAt: DateTime!
+  encryptedContent: String!
+  files: [String!]!
   images: [String!]!
   recipientEmail: String!
   status: String!
@@ -54,14 +72,14 @@ input LoginInput {
 
 type Mutation {
   login(loginInput: LoginInput!): AuthResponse!
-  sealLetter(input: CreateLetterInput!): LetterType!
+  sealLetter(input: CreateLetterInput!): Letter!
   signUp(input: SignUpInput!): AuthResponse!
 }
 
 type Query {
-  getLetterById(id: String!): LetterType
+  getMyLetterById(_id: String!): LetterType
   me: User!
-  publicVault: [LetterType!]!
+  myLetters: [Letter!]!
 }
 
 input SignUpInput {

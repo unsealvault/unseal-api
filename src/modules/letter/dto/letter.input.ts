@@ -9,6 +9,7 @@ import {
   IsIn,
 } from "class-validator";
 import { Type } from "class-transformer";
+import { Types } from "mongoose";
 
 @InputType()
 export class CreateLetterInput {
@@ -47,8 +48,7 @@ export class CreateLetterInput {
   @IsString()
   @IsOptional()
   authorName?: string;
-
-  // নতুন ৪টি ফিল্ড
+ 
   @Field(() => [String], { defaultValue: [] })
   @IsArray()
   @IsOptional()
@@ -73,7 +73,7 @@ export class CreateLetterInput {
 @ObjectType()
 export class LetterType {
   @Field(() => ID)
-  id!: string;
+  declare _id: Types.ObjectId;
 
   @Field(() => ID, { nullable: true })
   userId?: string;
@@ -90,7 +90,6 @@ export class LetterType {
   @Field()
   deliverAt!: Date;
 
-  // 🔹 এই ৩টি ফিল্ড যুক্ত করুন (যা মিসিং ছিল)
   @Field(() => String, { defaultValue: 'self' })
   audience!: string;
 
@@ -100,7 +99,6 @@ export class LetterType {
   @Field(() => String, { nullable: true, defaultValue: 'Anonymous' })
   authorName?: string;
 
-  // মিডিয়া ফাইল অ্যারেসমূহ
   @Field(() => [String], { defaultValue: [] })
   images!: string[];
 

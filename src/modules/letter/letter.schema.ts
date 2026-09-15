@@ -8,7 +8,7 @@ export type LetterDocument = Letter & Document;
 @Schema({ timestamps: true })
 export class Letter {
   @Field(() => ID)
-  id!: String;
+  declare _id: Types.ObjectId;
 
   @Field(() => ID, { nullable: true })
   @Prop({ type: Types.ObjectId, ref: 'User', required: false, index: true })
