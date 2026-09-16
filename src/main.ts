@@ -16,9 +16,9 @@ async function bootstrap() {
   // global validation pipe setup 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, //Only allow properties that are in the DTO
-      forbidNonWhitelisted: true, //Reject properties that are not in the DTO
-      transform: true, //Transform incoming data to match the DTO structure
+      whitelist: true, 
+      forbidNonWhitelisted: true, 
+      transform: true, 
     }),
   );
 
