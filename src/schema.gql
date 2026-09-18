@@ -19,6 +19,7 @@ input CreateLetterInput {
   encryptedContent: String!
   files: [String!]! = []
   images: [String!]! = []
+  paymentId: String
   recipientEmail: String!
   userId: ID
   videos: [String!]! = []
@@ -40,6 +41,7 @@ type Letter {
   encryptedContent: String!
   files: [String!]!
   images: [String!]!
+  paymentId: String
   recipientEmail: String!
   status: String!
   updatedAt: DateTime!
@@ -58,6 +60,7 @@ type LetterType {
   encryptedContent: String!
   files: [String!]!
   images: [String!]!
+  paymentId: String!
   recipientEmail: String!
   status: String!
   userId: ID

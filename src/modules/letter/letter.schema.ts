@@ -67,6 +67,9 @@ export class Letter {
 
   @Field(() => Date)
   updatedAt!: Date;
+
+  @Field(() => String, { nullable: true }) 
+  paymentId?: string;
 }
 
 export const LetterSchema = SchemaFactory.createForClass(Letter);

@@ -68,6 +68,11 @@ export class CreateLetterInput {
   @IsArray()
   @IsOptional()
   files?: string[];
+
+  @Field(() => String, { nullable: true })
+  @IsString()
+  @IsOptional()
+  paymentId?: string;
 }
 
 @ObjectType()
@@ -113,4 +118,12 @@ export class LetterType {
 
   @Field(() => Date)
   createdAt!: Date;
+
+   @Field()
+  paymentId?: string;
+
+
+
+
+  
 }
