@@ -7,13 +7,12 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "../user/user.service";
-import * as bcrypt from "bcrypt";
-import { LoginInput } from "./dto/login.input";
+import * as bcrypt from "bcrypt"; 
 import { StatusCodes } from "http-status-codes";
 import { User } from "../user/user.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { AuthResponse, SignUpInput } from "./dto/auth.dto";
+import { AuthResponse, LoginInput, SignUpInput } from "./dto/auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -106,7 +105,7 @@ export class AuthService {
 
     // tokens
     const accessToken = this.jwtService.sign(payload, {
-      expiresIn: "15m",
+      expiresIn: "7d",
     });
 
     const refreshToken = this.jwtService.sign(payload, {

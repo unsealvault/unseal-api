@@ -41,3 +41,17 @@ export class AuthResponse {
   @Field(() => User)
   user!: User;
 }
+
+
+@InputType()
+export class LoginInput {
+  @Field()
+  @IsEmail({}, { message: 'A valid email address is required' })
+  @IsNotEmpty()
+  email!: string;
+
+  @Field()
+  @IsString()
+  @IsNotEmpty({ message: 'Password is required' })
+  password!: string;
+}

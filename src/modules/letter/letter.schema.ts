@@ -70,6 +70,9 @@ export class Letter {
 
   @Field(() => String, { nullable: true }) 
   paymentId?: string;
+
+  @Prop({ type: String })
+  ipAddress?: string;
 }
 
 export const LetterSchema = SchemaFactory.createForClass(Letter);

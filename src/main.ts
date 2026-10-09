@@ -8,21 +8,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // CORS setup
-  // app.enableCors({
-  //   origin: true,
-  //   credentials: true,
-  // });
-
-
   app.enableCors({
-  origin: [ 
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://unseal.ydctcenter.org",
-    "https://unseal.ydctcenter.org",
-  ],
-  credentials: true,
-});
+    origin: true,
+    credentials: true,
+  });
+
 
   // global validation pipe setup 
   app.useGlobalPipes(
@@ -33,7 +23,7 @@ async function bootstrap() {
     }),
   );
 
-  const PORT = config.port || 4000;
+  const PORT = config.port || 4001;
   app.use(cookieParser());
   await app.listen(PORT);
   console.log(`🚀 Server is running on: http://localhost:${PORT}/graphql`);

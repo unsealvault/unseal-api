@@ -1,8 +1,7 @@
 // auth.resolver.ts
 import { Resolver, Mutation, Args, Context, Query } from "@nestjs/graphql";
-import { AuthService } from "./auth.service";
-import { LoginInput } from "./dto/login.input";
-import { AuthResponse, SignUpInput } from "./dto/auth.dto";
+import { AuthService } from "./auth.service"; 
+import { AuthResponse, LoginInput, SignUpInput } from "./dto/auth.dto";
 import { CurrentUser } from "./currentUser.decorator";
 import { User } from "../user/user.schema";
 import { UnauthorizedException, UseGuards } from "@nestjs/common";
