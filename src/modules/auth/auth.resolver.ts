@@ -42,28 +42,25 @@ export class AuthResolver {
     return this.authService.getMe(user._id.toString());
   }
 
-
   // কুকি সেট করার কমন হেল্পার
   private setAuthCookies(context: any, accessToken: string, refreshToken: string) {
     if (!context?.res?.cookie) return;
 
-    const isProduction = process.env.NODE_ENV === 'production';
-
-    // ACCESS TOKEN
-    context.res.cookie('accessToken', accessToken, {
+    // Access Token (15 মিনিট)
+    context.res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
-      path: '/',
-      maxAge: 15 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    // REFRESH TOKEN
-    context.res.cookie('refreshToken', refreshToken, {
+    // Refresh Token (7 দিন)
+    context.res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
-      path: '/',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   }
