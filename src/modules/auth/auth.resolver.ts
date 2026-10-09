@@ -1,6 +1,6 @@
 // auth.resolver.ts
 import { Resolver, Mutation, Args, Context, Query } from "@nestjs/graphql";
-import { AuthService } from "./auth.service"; 
+import { AuthService } from "./auth.service";
 import { AuthResponse, LoginInput, SignUpInput } from "./dto/auth.dto";
 import { CurrentUser } from "./currentUser.decorator";
 import { User } from "../user/user.schema";
@@ -35,31 +35,35 @@ export class AuthResolver {
   // ME QUERY
   @Query(() => User, { name: "me" })
   @UseGuards(GqlAuthGuard)
-  async getMe(@CurrentUser() user: User) {    if (!user) {
+  async getMe(@CurrentUser() user: User) {
+    if (!user) {
       throw new UnauthorizedException("User not found");
     }
     return this.authService.getMe(user._id.toString());
   }
 
+
   // কুকি সেট করার কমন হেল্পার
   private setAuthCookies(context: any, accessToken: string, refreshToken: string) {
     if (!context?.res?.cookie) return;
 
-    // Access Token (15 মিনিট)
-    context.res.cookie("accessToken", accessToken, {
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    // ACCESS TOKEN
+    context.res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      path: '/',
+      maxAge: 15 * 60 * 1000,
     });
 
-    // Refresh Token (7 দিন)
-    context.res.cookie("refreshToken", refreshToken, {
+    // REFRESH TOKEN
+    context.res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   }
