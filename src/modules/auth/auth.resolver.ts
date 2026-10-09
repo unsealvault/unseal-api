@@ -46,11 +46,11 @@ export class AuthResolver {
   private setAuthCookies(context: any, accessToken: string, refreshToken: string) {
     if (!context?.res?.cookie) return;
 
-    // Access Token (15 মিনিট)
+    // Access Token (7 দিন)
     context.res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      secure: true,
+      sameSite: true,
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -58,8 +58,8 @@ export class AuthResolver {
     // Refresh Token (7 দিন)
     context.res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      secure: true,
+      sameSite: true,
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
