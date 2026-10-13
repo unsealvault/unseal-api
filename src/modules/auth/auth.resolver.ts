@@ -26,6 +26,8 @@ export class AuthResolver {
   async login(@Args("loginInput") loginInput: LoginInput, @Context() context: any,): Promise<AuthResponse> {
     const result = await this.authService.login(loginInput);
 
+    console.log('login result', result.accessToken)
+
     // কুকি সেট
     this.setAuthCookies(context, result.accessToken, result.refreshToken);
 

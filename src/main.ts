@@ -8,16 +8,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // CORS setup
-  // app.enableCors({
-  //   origin: true,
-  //   credentials: true,
-  // });
-
   app.enableCors({
-    origin: [
-      'http://localhost:3001',
-      'https://unseal.ydctcenter.org',
-    ],
+    origin: true,
     credentials: true,
   });
 
