@@ -1,36 +1,25 @@
 {
   "compilerOptions": {
-    /* Module & Resolution */
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "target": "ES2023",
     "resolvePackageJsonExports": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
-
-    /* File Locations (ফাইল লোকেশন) */
-    "rootDir": "./src",                  /* সোর্স কোড ফোল্ডার (.ts ফাইল) */
-    "outDir": "./dist",                  /* বিল্ড ফাইল ফোল্ডার (.js ফাইল) */
-
-    /* Decorators & Metadata (NestJS / TypeORM ইত্যাদির জন্য) */
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-
-    /* Emit Settings */
     "declaration": true,
     "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
     "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
     "incremental": true,
-
-    /* Strictness & Checks */
     "skipLibCheck": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  }
 }
