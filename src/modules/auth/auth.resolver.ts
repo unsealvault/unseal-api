@@ -48,16 +48,12 @@ export class AuthResolver {
   private setAuthCookies(context: any, accessToken: string, refreshToken: string) {
     if (!context?.res?.cookie) return;
 
-    // চেক করা হচ্ছে আমরা প্রোডাকশনে আছি কিনা
-    const isProduction = process.env.NODE_ENV === 'production';
-
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction, // প্রোডাকশনে true (HTTPS), লোকালে false (HTTP)
-      sameSite: isProduction ? ('none' as const) : ('lax' as const), // প্রোডাকশনে 'none', লোকালে 'lax'
-      domain: isProduction ? '.unsealme.com' : undefined, // সাবডোমেইন শেয়ারের জন্য
+      secure: true,
+      sameSite: 'none',
       path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // ৭ দিন
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 
     // Access Token
