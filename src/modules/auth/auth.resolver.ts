@@ -26,7 +26,7 @@ export class AuthResolver {
   async login(@Args("loginInput") loginInput: LoginInput, @Context() context: any,): Promise<AuthResponse> {
     const result = await this.authService.login(loginInput);
 
-    console.log('login result', result.accessToken)
+    console.log('login result...', result.accessToken)
 
     // কুকি সেট
     this.setAuthCookies(context, result.accessToken, result.refreshToken);
@@ -44,26 +44,26 @@ export class AuthResolver {
     return this.authService.getMe(user._id.toString());
   }
 
-  // কুকি সেট করার কমন হেল্পার
+  // কুকি সেট করার কমন হেল্পার (আপডেট করা হয়েছে)
   private setAuthCookies(context: any, accessToken: string, refreshToken: string) {
     if (!context?.res?.cookie) return;
 
-    // Access Token (7 দিন)
-    context.res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: true,
-      path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    // চেক করা হচ্ছে আমরা প্রোডাকশনে আছি কিনা
+    const isProduction = process.env.NODE_ENV === 'production';
 
-    // Refresh Token (7 দিন)
-    context.res.cookie("refreshToken", refreshToken, {
+    const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      sameSite: true,
+      secure: isProduction, // প্রোডাকশনে true (HTTPS), লোকালে false (HTTP)
+      sameSite: isProduction ? ('none' as const) : ('lax' as const), // প্রোডাকশনে 'none', লোকালে 'lax'
+      domain: isProduction ? '.unsealme.com' : undefined, // সাবডোমেইন শেয়ারের জন্য
       path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+      maxAge: 7 * 24 * 60 * 60 * 1000, // ৭ দিন
+    };
+
+    // Access Token
+    context.res.cookie("accessToken", accessToken, cookieOptions);
+
+    // Refresh Token
+    context.res.cookie("refreshToken", refreshToken, cookieOptions);
   }
 }

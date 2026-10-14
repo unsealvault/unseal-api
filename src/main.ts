@@ -9,7 +9,7 @@ async function bootstrap() {
 
   // CORS setup
   app.enableCors({
-    origin: true,
+    origin: 'https://unsealme.com',
     credentials: true,
   });
 
