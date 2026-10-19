@@ -9,7 +9,13 @@ async function bootstrap() {
 
   // CORS setup
   app.enableCors({
-    origin: ['https://unsealme.com', 'http://localhost:3001'], 
+    origin: [
+      'http://localhost:3001',
+      'https://unsealme.com',        // আপনার লাইভ ফ্রন্টএন্ড ডোমেইন (প্রয়োজনমতো পরিবর্তন করুন)
+      'https://www.unsealme.com',
+      'https://unsealme.org',        // আপনার লাইভ ফ্রন্টএন্ড ডোমেইন (প্রয়োজনমতো পরিবর্তন করুন)
+      'https://www.unsealme.org'      // www সহ বা সাবডোমেইন থাকলে তা এখানে দিন
+    ],
     credentials: true,
   });
 

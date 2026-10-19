@@ -44,22 +44,29 @@ export class AuthResolver {
     return this.authService.getMe(user._id.toString());
   }
 
-  // কুকি সেট করার কমন হেল্পার (আপডেট করা হয়েছে)
+  // কুকি সেট করার কমন হেল্পার (আপডেট করা হয়েছে)
   private setAuthCookies(context: any, accessToken: string, refreshToken: string) {
     if (!context?.res?.cookie) return;
 
+    const isProduction = process.env.NODE_ENV === 'production';
+
     const cookieOptions = {
       httpOnly: true,
-      secure: true,
-      sameSite: 'lax',
+      secure: isProduction,                     // লাইভ সার্ভারে (HTTPS) true হবে
+      sameSite: (isProduction ? 'none' : 'lax') as boolean | 'lax' | 'strict' | 'none',    // প্রোডাকশনে 'none' এবং লোকালহোস্টে 'lax'
       path: "/",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
     };
 
-    // Access Token
-    context.res.cookie("accessToken", accessToken, cookieOptions);
+    // Access Token (15 মিনিট)
+    context.res.cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000,
+    });
 
-    // Refresh Token
-    context.res.cookie("refreshToken", refreshToken, cookieOptions);
+    // Refresh Token (7 দিন)
+    context.res.cookie("refreshToken", refreshToken, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
   }
 }
