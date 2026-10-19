@@ -44,7 +44,6 @@ export class AuthResolver {
     return this.authService.getMe(user._id.toString());
   }
 
-  // কুকি সেট করার কমন হেল্পার (আপডেট করা হয়েছে)
   private setAuthCookies(context: any, accessToken: string, refreshToken: string) {
     if (!context?.res?.cookie) return;
 
@@ -52,8 +51,8 @@ export class AuthResolver {
 
     const cookieOptions = {
       httpOnly: true,
-      secure: isProduction,                     // লাইভ সার্ভারে (HTTPS) true হবে
-      sameSite: (isProduction ? 'none' : 'lax') as boolean | 'lax' | 'strict' | 'none',    // প্রোডাকশনে 'none' এবং লোকালহোস্টে 'lax'
+      secure: isProduction, // লাইভ সার্ভারে (HTTPS) true হবে
+      sameSite: isProduction ? 'none' : 'lax', // ক্রস-ডোমেইন সাব-ডোমেইনের জন্য 'none' বাধ্যতামূলক
       path: "/",
     };
 
