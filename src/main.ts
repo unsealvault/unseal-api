@@ -3,18 +3,22 @@ import { AppModule } from "./app.module";
 import { ValidationPipe } from "@nestjs/common";
 import config from "./config";
 import cookieParser from 'cookie-parser';
+import { NestExpressApplication } from "@nestjs/platform-express";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.set('trust proxy', 1);
 
   // CORS setup
   app.enableCors({
     origin: [
+      'http://localhost:3000',
       'http://localhost:3001',
-      'https://unsealme.com',        // আপনার লাইভ ফ্রন্টএন্ড ডোমেইন (প্রয়োজনমতো পরিবর্তন করুন)
+      'https://unsealme.com',      
       'https://www.unsealme.com',
-      'https://unsealme.org',        // আপনার লাইভ ফ্রন্টএন্ড ডোমেইন (প্রয়োজনমতো পরিবর্তন করুন)
-      'https://www.unsealme.org'      // www সহ বা সাবডোমেইন থাকলে তা এখানে দিন
+      'https://unsealme.org',   
+      'https://www.unsealme.org'  
     ],
     credentials: true,
   });

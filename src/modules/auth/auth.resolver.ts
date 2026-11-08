@@ -38,10 +38,13 @@ export class AuthResolver {
   @Query(() => User, { name: "me" })
   @UseGuards(GqlAuthGuard)
   async getMe(@CurrentUser() user: User) {
+    console.log('getMe user... from auth resolver', user);
     if (!user) {
       throw new UnauthorizedException("User not found");
     }
-    return this.authService.getMe(user._id.toString());
+    const result = await this.authService.getMe(user._id.toString());
+    console.log('getMe result... from auth resolver', result);
+    return result;
   }
 
   private setAuthCookies(context: any, accessToken: string, refreshToken: string) {
@@ -52,8 +55,9 @@ export class AuthResolver {
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction, // লাইভ সার্ভারে (HTTPS) true হবে
-      sameSite: isProduction ? 'none' : 'lax', // ক্রস-ডোমেইন সাব-ডোমেইনের জন্য 'none' বাধ্যতামূলক
+      sameSite: 'lax' as const,
       path: "/",
+      ...(isProduction && { domain: '.unsealme.com' }),
     };
 
     // Access Token (15 মিনিট)
