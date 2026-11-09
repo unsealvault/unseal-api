@@ -26,7 +26,7 @@ export class AuthResolver {
   async login(@Args("loginInput") loginInput: LoginInput, @Context() context: any,): Promise<AuthResponse> {
     const result = await this.authService.login(loginInput);
 
-    console.log('login result...', result.accessToken)
+    // console.log('login result...', result.accessToken)
 
     // কুকি সেট
     this.setAuthCookies(context, result.accessToken, result.refreshToken);
@@ -57,7 +57,7 @@ export class AuthResolver {
       secure: isProduction, // লাইভ সার্ভারে (HTTPS) true হবে
       sameSite: 'lax' as const,
       path: "/",
-      ...(isProduction && { domain: '.unsealme.com' }),
+      // ...(isProduction && { domain: '.unsealme.com' }),
     };
 
     // Access Token (15 মিনিট)
